@@ -1,0 +1,149 @@
+import sqlalchemy
+
+db = 'postgresql://user_music:12345@localhost:5432/db_music'
+engine = sqlalchemy.create_engine(db)
+con = engine.connect()
+con
+
+
+#1
+print(
+    con.execute(
+        """
+        SELECT g.name, COUNT(DISTINCT gs.singers_id )
+        FROM GenreSingers gs
+        jOIN genre g  ON gs.genre_id = g.id
+        GROUP BY g.name;
+        """
+    ).fetchall()
+)
+
+
+#2
+
+print(
+     con.execute(
+         """
+         SELECT  COUNT(t.id)
+         FROM tracks t
+         JOIN album a ON t.id = a.id
+         WHERE a.year BETWEEN 2019 AND 2020;
+         """
+     ).fetchall()
+)
+
+
+#3
+
+print(
+    con.execute(
+        """
+        SELECT a.name, AVG(song_time) FROM album a
+        JOIN tracks t ON a.id = t.album_id
+        GROUP BY a.name;
+        """
+    ).fetchall()
+)
+
+
+#4
+
+print(
+     con.execute(
+         """
+         SELECT  s.name
+         FROM singers s
+         JOIN AlbumSingers a_s ON s.id = a_s.singers_id
+         JOIN album a ON a_s.album_id = a.id
+         WHERE a.year <> 2020;
+         """
+     ).fetchall()
+)
+
+
+#5
+
+print(
+     con.execute(
+         """
+         SELECT c.name
+         FROM collection c
+         JOIN TracksCollection tc ON c.id = tc.collection_id
+         JOIN tracks t ON tc.tracks_id = t.id
+         JOIN album a ON t.album_id = a.id
+         JOIN AlbumSingers a_s ON a.id = a_s.album_id
+         JOIN singers s ON a_s.singers_id = s.id
+         WHERE s.name = 'Adele';
+         """
+     ).fetchall()
+)
+
+#6
+print(
+     con.execute(
+         """
+         SELECT a.name
+         FROM album a
+         JOIN AlbumSingers a_s ON a.id = a_s.album_id
+         JOIN singers s ON a_s.singers_id = s.id
+         JOIN GenreSingers gs ON s.id = gs.singers_id
+         JOIN genre g ON gs.genre_id = g.id
+         GROUP BY a.name
+         HAVING COUNT(gs.genre_id) > 1 ;
+         """
+     ).fetchall()
+)
+
+
+
+#7
+
+print(
+    con.execute(
+        """
+        SELECT t.name
+        FROM tracks t
+        LEFT JOIN TracksCollection tc ON t.id = tc.tracks_id
+        LEFT JOIN collection c ON tc.collection_id = c.id
+        WHERE tc.tracks_id IS NULL;
+        """
+    ).fetchall()
+)
+
+#8
+
+
+
+print(
+    con.execute(
+        """
+        SELECT s.name, t.song_time
+        FROM singers s
+        JOIN AlbumSingers a_s ON s.id = a_s.singers_id
+        JOIN album a ON a.id = a_s.album_id
+        JOIN tracks t ON t.album_id = a.id
+        WHERE t.song_time = (SELECT MIN(t.song_time) FROM tracks t)
+        """
+    ).fetchall()
+)
+
+
+#9
+
+print(
+    con.execute(
+        """
+        SELECT a.name, COUNT(t.id)
+        FROM album a
+        JOIN tracks t ON a.id = t.album_id
+        GROUP BY a.name
+        HAVING COUNT (t.id) = (
+            SELECT COUNT(t.id)
+            FROM album a
+            JOIN tracks t ON a.id = t.album_id
+            GROUP BY a.name
+            ORDER BY COUNT(t.id)\
+            LIMIT 1)
+        """
+    ).fetchall()
+)
