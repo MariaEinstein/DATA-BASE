@@ -1,0 +1,177 @@
+import sqlalchemy
+
+db = 'postgresql://user_music:12345@localhost:5432/db_music'
+engine = sqlalchemy.create_engine(db)
+con = engine.connect()
+con
+
+#singers
+
+insert = con.execute(
+"""
+INSERT INTO 
+    singers(id, name) 
+VALUES
+    (1, 'Guns & Roses'),
+    (2, 'Cinderella'),
+    (3, 'Midnight Memories'),
+    (4, 'Tori Amos'),
+    (5, 'Bon Jovi'),
+    (6, 'Adele'),
+    (7, 'Jakyl'),
+    (8, 'The Cinematic Orchestra'),
+    (9, 'James Brown')
+    (10, 'Steve Perry');
+"""
+)
+
+#genre
+
+insert = con.execute(
+"""
+INSERT INTO
+    genre(id, name)
+VALUES
+    (1, 'classical'),
+    (2, 'rock'),
+    (3, 'pop '),
+    (4, 'folk'),
+    (5, 'jazz');
+"""
+)
+
+#album
+
+insert = con.execute(
+"""
+INSERT INTO
+    album(id, name, year )
+VALUES
+    (1, 'album1', 1992),
+    (2, 'album2', 2018),
+    (3, 'album3', 1994),
+    (4, 'album4', 1995),
+    (5, 'album5', 1992),
+    (6, 'album6', 1997),
+    (7, 'album7', 2000),
+    (8, 'album8', 2020);
+"""
+)
+
+
+#tracks
+
+insert = con.execute(
+"""
+INSERT INTO 
+    tracks(id, name, song_time, album_id )
+VALUES 
+    (1, 'My Michelle','00:05:57',1),
+    (2, 'Paradise City','00:05:37',1),
+    (3, 'Dont Cry','00:04:17',2),
+    (4, 'November Rain','00:03:45',2),
+    (5, 'Chinese Democracy','00:06:19',3),
+    (6, 'If You Dont Like It','00:05:35',4),
+    (7, 'Second Wind','00:05:35',4),
+    (8, 'Never Say Goodbye','00:03:21',5),
+    (9, 'Without Love','00:04:55',5),
+    (10, 'Jackyl','00:05:48',6),
+    (11, 'Push Comes to Shove','00:02:18',6),
+    (12, 'One Direction','00:03:02',7),
+    (13, 'Rolling in the Deep','00:04:17',8),
+    (14, 'Someone Like You','00:05:27',8),
+    (15, 'To Build a Home','00:06:32',5);
+"""
+)
+
+
+#collection
+
+insert = con.execute(
+"""
+INSERT INTO
+    collection(id, name, release)
+VALUES
+    (1, 'РЎР±РѕСЂРЅРёРє_1','2016'),
+    (2, 'РЎР±РѕСЂРЅРёРє_2','2019'),
+    (3, 'РЎР±РѕСЂРЅРёРє_3','2018'),
+    (4, 'РЎР±РѕСЂРЅРёРє_4','2012'),
+    (5, 'РЎР±РѕСЂРЅРёРє_5','2006'),
+    (6, 'РЎР±РѕСЂРЅРёРє_6','2001'),
+    (7, 'РЎР±РѕСЂРЅРёРє_7','2005'),
+    (8, 'РЎР±РѕСЂРЅРёРє_8','2015');
+"""
+)
+
+
+#AlbumSingers
+
+
+insert = con.execute(
+"""
+INSERT INTO
+    AlbumSingers (singers_id, album_id ) 
+VALUES
+    (1, 1),
+    (2, 1),
+    (3, 6),
+    (4, 5),
+    (5, 4),
+    (6, 3),
+    (7, 2),
+    (8, 8)
+    (9, 1)
+    (10, 1);
+"""
+)
+
+
+#GenreSingers
+
+insert = con.execute(
+"""
+INSERT INTO 
+    GenreSingers (singers_id, genre_id ) 
+VALUES
+    (1, 5),
+    (2, 4),
+    (3, 3),
+    (4, 2),
+    (5, 1),
+    (6, 5),
+    (7, 4),
+    (8, 3)
+    (9, 2)
+    (10, 3);
+"""
+)
+
+
+
+#TracksCollection
+
+insert = con.execute(
+"""
+INSERT INTO 
+    TracksCollection (tracks_id , collection_id)
+VALUES
+    (1, 1),
+    (2, 1),
+    (3, 1),
+    (4, 2),
+    (5, 2),
+    (6, 2),
+    (7, 3),
+    (8, 3),
+    (9, 4),
+    (10, 4),
+    (11, 4),
+    (12, 5),
+    (13, 5),
+    (14, 5),
+    (10, 6),
+    (9, 7),
+    (1, 8),
+    (3, 8);
+"""
+))
